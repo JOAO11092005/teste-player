@@ -1,35 +1,23 @@
 document.getElementById('check-button').addEventListener('click', function() {
-    const videoUrl = document.getElementById('video-url').value;
-    const playerContainer = document.getElementById('player-container');
-    const videoPlayer = document.getElementById('video-player');
-    const videoSource = document.getElementById('video-source');
-    const errorMessage = document.getElementById('error-message');
+    var videoUrl = document.getElementById('video-url').value;
+    var videoPlayer = videojs('video-player');
+    var message = document.getElementById('message');
 
-    // Limpar mensagens anteriores
-    playerContainer.classList.add('hidden');
-    errorMessage.classList.add('hidden');
-    videoSource.src = '';
+    videoPlayer.src({ type: 'video/mp4', src: videoUrl });
+    
+    // Testar se o vídeo pode ser reproduzido
+    videoPlayer.ready(function() {
+        this.on('error', function() {
+            message.textContent = "Erro ao carregar o vídeo. Verifique o link ou o formato.";
+        });
 
-    fetch('/check-video', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ url: videoUrl })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.valid) {
-            videoSource.src = data.url;
-            videoPlayer.load();
-            playerContainer.classList.remove('hidden');
-        } else {
-            errorMessage.textContent = 'Vídeo não encontrado ou URL inválido.';
-            errorMessage.classList.remove('hidden');
-        }
-    })
-    .catch(error => {
-        errorMessage.textContent = 'Erro ao verificar o vídeo: ' + error;
-        errorMessage.classList.remove('hidden');
+        this.on('loadedmetadata', function() {
+            message.textContent = "Vídeo carregado com sucesso!";
+            this.play().catch(function(error) {
+                message.textContent = "Não foi possível reproduzir o vídeo automaticamente. Clique no player para reproduzir.";
+            });
+        });
     });
+
+    videoPlayer.show();
 });

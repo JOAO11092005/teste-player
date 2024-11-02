@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player de Vídeo IPTV</title>
+    <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
     <link rel="stylesheet" href="../static/style.css">
+    <title>Video Player</title>
 </head>
 <body>
     <div class="container">
-        <h1>Reproduza seu Vídeo IPTV</h1>
-        <input type="text" id="video-url" placeholder="Cole o URL do vídeo aqui">
+        <h1>Verificar Vídeo IPTV</h1>
+        <input type="text" id="video-url" placeholder="Cole o link do vídeo aqui">
         <button id="check-button">Verificar Vídeo</button>
-        <div id="player-container" class="hidden">
-            <video id="video-player" controls>
-                <source id="video-source" src="" type="video/mp4">
-                Seu navegador não suporta a tag de vídeo.
-            </video>
-        </div>
-        <div id="error-message" class="hidden"></div>
+        <video id="video-player" class="video-js vjs-default-skin" controls style="display: none; width: 100%; max-width: 600px;">
+            <source id="video-source" src="" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+        </video>
+        <p id="message"></p>
     </div>
+
+    <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
     <script src="../static/script.js"></script>
 </body>
 </html>
