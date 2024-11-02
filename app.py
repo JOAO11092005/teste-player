@@ -1,26 +1,19 @@
-from flask import Flask, render_template, Response
-import requests
+from flask import Flask, render_template
+import subprocess
+import os
 
 app = Flask(__name__)
 
-VIDEO_URL = "http://cdn.teambr.live:80/movie/iptv0887/19971460887/49856.mp4"
-
-def get_video_url():
-    # Aqui você pode implementar a lógica para pegar e analisar a URL real
-    # No exemplo, retornamos uma URL fixa, mas você pode implementar a lógica de extração
-    return "http://66.90.84.42/vauth/AZB6XLAEwb9cVNs7R0Fq4bGidV5jiq7ymN47c_UJ1ILrvo6MJGJWS7suNjB03nhZmfttIXYdzOUW-29vvhV_km8XEK6MeLEcf1sUjnSZdg4h5T7EN0CXb3camVC4O_z6vh_3Rx3XT78OEx-jEfz95obHbKbEFrU-cYRFQadjzSQumOPB3crdNqk-m0aKPAmykLhZgXBEylPlRiQ9wfpJ33DcHexqcUIaJiLa5y98bxngLbzAIsKRt2o7dPtdCP9AY9PbpAJR13dbw_bw_2F_XOaXJy6O1w2DP3B-EQuzPqtl1bNL0hQLzkpGYb8dAdX-ee7OkMLSj5_oiMkS-RrnNsJUWjPgc-CJcOt4fW5apWbz3XXrnK8tUqOo7-1R5TgJm2kGG9tLOvpozMMKQp1GRa4KTMUlz1ER0zeZMuhB1iuXDJaRnkFRJM60UZuwqNCwv_MkZ4XRCkoP6ZH_oqiN8S_us2J_5lrflIwTckZrEgxqqnGipfDMrGkRz0vx5MYNdD8-8VyHYgG0p15JAzJsMp5xCWDBWL7WWT0b_8P_8sXC98ZDNSwAnVHm4sawqKcdiD7KjgpVdntvUWTI7LIe-FWi_IKetn9GbffuqD3uXYxh9o07eIutJEgWxK07gaQ1m722XoNzpg_Thv_UqWBLBLqqyIieV_HsWLZV513jjak"
+# Função para instalar os requisitos
+def install_requirements():
+    subprocess.check_call([os.sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'])
 
 @app.route('/')
-def home():
-    video_url = get_video_url()
-    return render_template('index.html', video_url=video_url)
-
-@app.route('/video')
-def video():
-    video_url = get_video_url()
-    response = requests.get(video_url, stream=True)
-    return Response(response.iter_content(chunk_size=4096),
-                    content_type=response.headers['Content-Type'])
+def index():
+    # Insira aqui a lógica para obter o link
+    original_link = "http://38.99.239.203/deliver/20206.mp4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjAwMDEiLCJleHAiOjE3MzA2MDQ1ODJ9.eyJ1YyI6Ik9EYzJNRFUyIiwicGMiOiJVR0k1VTFsSyIsInN0IjoiMjAyMDYubXA0IiwiaXAiOiIxNDMuMjU1LjE0OC4xOTIifQ.cbFFzkYrR-aVQzUH-F0U8xricakSDgMVInQl3MwvH98&uc=ODc2MDU2&pc=UGI5U1lK"
+    return render_template('index.html', video_link=original_link)
 
 if __name__ == '__main__':
-    app.run(ssl_context='adhoc')  # Use SSL para HTTPS
+    install_requirements()  # Chama a função para instalar requisitos
+    app.run(host='0.0.0.0', port=5000)
