@@ -1,0 +1,7 @@
+services:
+  - type: static
+    name: video-player
+    env: static
+    buildCommand: ''
+    publishDir: '.'
+    autoDeploy: true
