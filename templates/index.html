@@ -4,33 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reprodutor de Vídeo</title>
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            background-color: #f0f0f0;
-        }
-        .video-container {
-            margin-bottom: 20px;
-        }
-    </style>
+    <link href="https://vjs.zencdn.net/7.19.1/video-js.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="video-container">
-        <video id="player" controls crossorigin>
+        <video
+            id="my-video"
+            class="video-js"
+            controls
+            preload="auto"
+            width="640"
+            height="264"
+            data-setup='{}'
+        >
             <source src="http://cdn.teambr.live:80/movie/iptv0887/19971460887/49856.mp4" type="video/mp4" />
-            Seu navegador não suporta o elemento de vídeo.
+            <p class="vjs-no-js">
+                Para visualizar este vídeo, habilite o JavaScript ou considere um navegador que suporte vídeo HTML5.
+            </p>
         </video>
     </div>
-    <script src="https://cdn.plyr.io/3.6.8/plyr.polyfilled.js"></script>
-    <script>
-        const player = new Plyr('#player', {
-            // Configurações do Plyr, se necessário
-        });
-    </script>
+
+    <script src="https://vjs.zencdn.net/7.19.1/video.min.js"></script>
+    <script src="../script.js"></script>
 </body>
 </html>
