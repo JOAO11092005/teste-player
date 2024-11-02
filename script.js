@@ -1,23 +1,46 @@
+// Inicializa o player Video.js
+const player = videojs('videoPlayer');
+
+// Função para carregar o vídeo
+function loadVideo(url) {
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const fullUrl = proxyUrl + url; // Adiciona o proxy à URL
+    player.src({ type: 'video/mp4', src: fullUrl });
+    player.play();
+}
+
+// Evento de clique para carregar o vídeo
 document.getElementById('loadVideo').addEventListener('click', function() {
     const videoUrl = document.getElementById('videoUrl').value;
-    const videoPlayer = document.getElementById('videoPlayer');
-    const videoSource = document.getElementById('videoSource');
     const statusMessage = document.getElementById('statusMessage');
 
-    // Verifica se a URL começa com "http://"
-    if (videoUrl.startsWith('http://')) {
-        videoSource.src = videoUrl;
-        videoPlayer.load(); // Recarrega o vídeo com a nova fonte
-        videoPlayer.play(); // Inicia a reprodução
+    if (videoUrl.startsWith('http://') || videoUrl.startsWith('https://')) {
+        loadVideo(videoUrl);
         statusMessage.textContent = ""; // Limpa mensagens anteriores
     } else {
-        statusMessage.textContent = 'Por favor, insira uma URL válida que comece com "http://".';
+        statusMessage.textContent = 'Por favor, insira uma URL válida que comece com "http://" ou "https://".';
     }
 });
 
-// Carregar o vídeo padrão ao abrir a página
-window.onload = function() {
-    const defaultVideoUrl = "http://cdn.teambr.live:80/movie/iptv0887/19971460887/49856.mp4";
-    document.getElementById('videoSource').src = defaultVideoUrl;
-    document.getElementById('videoPlayer').load();
-};
+// Evento de clique para verificar a URL
+document.getElementById('checkUrl').addEventListener('click', function() {
+    const videoUrl = document.getElementById('videoUrl').value;
+    const statusMessage = document.getElementById('statusMessage');
+
+    if (videoUrl.startsWith('http://') || videoUrl.startsWith('https://')) {
+        fetch(videoUrl, { method: 'HEAD' })
+            .then(response => {
+                if (response.ok) {
+                    statusMessage.textContent = 'URL está acessível e válida.';
+                    loadVideo(videoUrl); // Carrega o vídeo se a URL for válida
+                } else {
+                    statusMessage.textContent = 'A URL não está acessível. Código: ' + response.status;
+                }
+            })
+            .catch(error => {
+                statusMessage.textContent = 'Erro ao verificar a URL: ' + error.message;
+            });
+    } else {
+        statusMessage.textContent = 'Por favor, insira uma URL válida que comece com "http://" ou "https://".';
+    }
+});

@@ -1,9 +1,9 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f0f0f0;
     padding: 20px;
 }
 
@@ -11,35 +11,12 @@ body {
     margin-bottom: 20px;
 }
 
-video {
-    width: 600px;
-    height: auto;
-    border: 2px solid #333;
-    border-radius: 5px;
-}
-
 input {
-    padding: 10px;
-    margin-bottom: 10px;
     width: 300px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    padding: 10px;
+    margin-right: 10px;
 }
 
 button {
     padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-#statusMessage {
-    margin-top: 10px;
-    color: red;
 }
