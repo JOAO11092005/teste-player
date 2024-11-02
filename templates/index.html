@@ -1,31 +1,15 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reprodutor de Vídeo</title>
-    <link href="https://vjs.zencdn.net/7.19.1/video-js.css" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css">
+    <title>Player de Vídeo</title>
 </head>
 <body>
-    <div class="video-container">
-        <video
-            id="my-video"
-            class="video-js"
-            controls
-            preload="auto"
-            width="640"
-            height="264"
-            data-setup='{}'
-        >
-            <source src="http://cdn.teambr.live:80/movie/iptv0887/19971460887/49856.mp4" type="video/mp4" />
-            <p class="vjs-no-js">
-                Para visualizar este vídeo, habilite o JavaScript ou considere um navegador que suporte vídeo HTML5.
-            </p>
-        </video>
-    </div>
-
-    <script src="https://vjs.zencdn.net/7.19.1/video.min.js"></script>
-    <script src="../script.js"></script>
+    <h1>Reprodutor de Vídeo</h1>
+    <video width="640" height="480" controls>
+        <source src="{{ video_url }}" type="video/mp4">
+        Seu navegador não suporta o elemento de vídeo.
+    </video>
 </body>
 </html>
