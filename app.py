@@ -1,15 +1,23 @@
-from flask import Flask, Response
+from flask import Flask, render_template, request, jsonify
 import requests
 
 app = Flask(__name__)
 
-@app.route('/video')
-def video():
-    video_url = 'http://cdn.teambr.live:80/movie/iptv0887/19971460887/49856.mp4'
-    response = requests.get(video_url, stream=True)
+@app.route('/')
+def home():
+    return render_template('index.html')
 
-    return Response(response.iter_content(chunk_size=1024),
-                    content_type='video/mp4')
+@app.route('/check-video', methods=['POST'])
+def check_video():
+    video_url = request.json['url']
+    try:
+        response = requests.head(video_url)
+        if response.status_code == 200:
+            return jsonify({'valid': True, 'url': video_url})
+        else:
+            return jsonify({'valid': False})
+    except Exception as e:
+        return jsonify({'valid': False, 'error': str(e)})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
