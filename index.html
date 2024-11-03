@@ -2,105 +2,52 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reprodutor de Vídeo com Próximo Player</title>
-
-    <!-- Estilos do Video.js -->
-    <link href="https://vjs.zencdn.net/7.21.0/video-js.css" rel="stylesheet" />
-
-    <!-- Bibliotecas Video.js e Hls.js -->
-    <script src="https://vjs.zencdn.net/7.21.0/video.min.js"></script>
+    <title>Reprodutor de Vídeo em HTTP</title>
+    <!-- Video.js para manipular o player -->
+    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
+    <!-- HLS.js para suporte a HLS -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f3f4f6;
-            font-family: Arial, sans-serif;
-        }
-        .video-container {
-            width: 80%;
-            max-width: 800px;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            text-align: center;
-        }
-        .status {
-            font-size: 14px;
-            color: #333;
-            text-align: center;
-            margin-top: 10px;
-        }
-    </style>
 </head>
 <body>
+    <div id="player-container">
+        <video-js id="videoPlayer" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360"></video-js>
+    </div>
 
-<div class="video-container">
-    <!-- Video.js player -->
-    <video id="myVideo" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360"></video>
+    <button onclick="loadNextLink()">Próximo Vídeo</button>
 
-    <!-- Botão para o próximo player -->
-    <button onclick="loadNextVideo()" style="margin-top: 10px;">Próximo Vídeo</button>
+    <script>
+        const videoLinks = [
+            "https://sempra.pro/a1/out/old/6/1237/1237_25087456rambo-III-1988.m3u8",
+            "http://bdta.pro:80/movie/876056/Pb9SYJ/20206.mp4",
+            "http://link3.com/video.mp4",
+            // Adicione mais links conforme necessário
+        ];
 
-    <div class="status" id="status">Status: Aguardando ação...</div>
-</div>
+        let currentIndex = 0;
+        const player = videojs('videoPlayer');
 
-<script>
-    const videoElement = document.getElementById('myVideo');
-    const status = document.getElementById('status');
-
-    // Lista de URLs de vídeos
-    const videoSources = [
-        "http://bdta.pro:80/movie/876056/Pb9SYJ/20206.mp4",
-        "URL_DO_PROXIMO_VIDEO_AQUI"
-    ];
-    let currentVideoIndex = 0;
-
-    // Função para inicializar o player
-    function loadVideo(source) {
-        if (Hls.isSupported()) {
-            const hls = new Hls();
-            hls.loadSource(source);
-            hls.attachMedia(videoElement);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                videoElement.play();
-                updateStatus('Reproduzindo com HLS.');
-            });
-        } else {
-            videoElement.src = source;
-            videoElement.addEventListener('loadedmetadata', () => {
-                videoElement.play();
-                updateStatus('Reproduzindo vídeo MP4.');
-            });
+        function initializePlayer(link) {
+            if (Hls.isSupported() && link.endsWith(".m3u8")) {
+                const hls = new Hls();
+                hls.loadSource(link);
+                hls.attachMedia(player.tech_.el_);
+                player.src({ type: 'application/x-mpegURL', src: link });
+            } else {
+                player.src({ src: link, type: 'video/mp4' });
+            }
         }
-    }
 
-    // Função para atualizar o status
-    function updateStatus(message) {
-        status.textContent = `Status: ${message}`;
-    }
+        function loadNextLink() {
+            currentIndex = (currentIndex + 1) % videoLinks.length;
+            const nextLink = videoLinks[currentIndex];
+            initializePlayer(nextLink);
+            player.play();
+        }
 
-    // Função para carregar o próximo vídeo
-    function loadNextVideo() {
-        currentVideoIndex = (currentVideoIndex + 1) % videoSources.length;
-        loadVideo(videoSources[currentVideoIndex]);
-        updateStatus('Carregando próximo vídeo...');
-    }
-
-    // Carregar o primeiro vídeo ao abrir a página
-    loadVideo(videoSources[currentVideoIndex]);
-
-    // Eventos para controle do status do vídeo
-    videoElement.addEventListener('play', () => updateStatus('Vídeo reproduzindo...'));
-    videoElement.addEventListener('pause', () => updateStatus('Vídeo pausado.'));
-    videoElement.addEventListener('ended', () => updateStatus('Vídeo concluído.'));
-    videoElement.addEventListener('error', () => updateStatus('Erro ao carregar o vídeo.'));
-</script>
-
+        document.addEventListener("DOMContentLoaded", () => {
+            initializePlayer(videoLinks[currentIndex]);
+        });
+    </script>
 </body>
 </html>
